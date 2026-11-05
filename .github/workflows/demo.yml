@@ -32,6 +32,7 @@ jobs:
           path: |
             dist
             package.json
+            !dist/**/*:Zone.Identifier
 
   deploy:
     needs: build
