@@ -19,6 +19,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     outputs: # para definir salidas del job, que pueden ser usadas en otros jobs
+      # steps -> variable de contexto
       script-file: ${{ steps.publish.outputs.script-file }}
     steps:
       - name: Get code
@@ -29,6 +30,7 @@ jobs:
         run: npm run build
       - name: Publish JS filename
         id: publish
+        # GITHUB_OUTPUT es una variable de entorno que apunta a un fichero propio para cada uno de los steps que se van ejecutando.
         run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
         # alternative syntax not recommended:
         # run: find dist/assets/*.js -type f -execdir echo '::set-output name=script-file::{}' ';'
@@ -52,5 +54,8 @@ jobs:
 
       - name: Output contents
         run: ls
+      - name: Output filename
+        run: echo "${{ needs.build.outputs.script-file }}"
+
       - name: Deploy
         run: echo "Deploying..."
